@@ -82,6 +82,9 @@ export function VideoGenerator({
     const savedKey = localStorage.getItem('did-api-key');
     if (savedKey) {
       setDidApiKey(savedKey);
+    } else {
+      // No API key saved, show input automatically
+      setShowApiKeyInput(true);
     }
   }, []);
 
@@ -458,53 +461,55 @@ export function VideoGenerator({
         </div>
 
         {/* D-ID API Key Input */}
-        {useDID && showApiKeyInput && (
-          <Alert className="bg-primary/5 border-primary/20">
-            <Key className="h-4 w-4" />
-            <AlertTitle>API Key de D-ID</AlertTitle>
-            <AlertDescription className="space-y-3 mt-2">
-              <p className="text-sm">
-                Para generar videos con movimientos naturales necesitas una API key de D-ID.
-              </p>
-              <div className="flex gap-2">
-                <Input
-                  type="password"
-                  placeholder="Ingresa tu API key de D-ID"
-                  value={didApiKey}
-                  onChange={(e) => setDidApiKey(e.target.value)}
-                  className="flex-1"
-                />
-                <Button onClick={saveApiKey} size="sm">
-                  Guardar
+        {useDID && (
+          <div className="space-y-3">
+            {!showApiKeyInput && didApiKey ? (
+              <div className="flex items-center justify-between p-3 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800">
+                <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                  <CheckCircle className="h-4 w-4" />
+                  <span className="text-sm font-medium">API Key configurada ✓</span>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setShowApiKeyInput(true)}
+                  className="h-7 text-xs"
+                >
+                  Cambiar
                 </Button>
               </div>
-              <a 
-                href="https://studio.d-id.com/account-settings" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
-              >
-                <ExternalLink className="h-3 w-3" />
-                Obtener API key gratis (5 minutos de video gratis)
-              </a>
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {/* D-ID Status */}
-        {useDID && didApiKey && !showApiKeyInput && (
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-2 text-green-600">
-              <CheckCircle className="h-4 w-4" />
-              API Key configurada
-            </div>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => setShowApiKeyInput(true)}
-            >
-              Cambiar
-            </Button>
+            ) : (
+              <div className="p-4 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 space-y-3">
+                <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400">
+                  <Key className="h-4 w-4" />
+                  <span className="text-sm font-medium">Configura tu API Key de D-ID</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Para generar videos con movimientos naturales, ingresa tu API key de D-ID.
+                </p>
+                <div className="flex gap-2">
+                  <Input
+                    type="password"
+                    placeholder="Pega aquí tu API key de D-ID..."
+                    value={didApiKey}
+                    onChange={(e) => setDidApiKey(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button onClick={saveApiKey} size="sm" className="px-4">
+                    Guardar
+                  </Button>
+                </div>
+                <a 
+                  href="https://studio.d-id.com/account-settings" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  Obtener API key gratis en D-ID (5 min de video gratis)
+                </a>
+              </div>
+            )}
           </div>
         )}
 
