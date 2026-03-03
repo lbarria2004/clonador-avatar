@@ -1,0 +1,6 @@
+skills/
+node_modules/
+.next/
+.git/
+*.md
+.env*.local
